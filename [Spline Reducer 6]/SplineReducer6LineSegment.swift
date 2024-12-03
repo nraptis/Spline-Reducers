@@ -1,5 +1,5 @@
 //
-//  SplineReducer3LineSegment.swift
+//  SplineReducer6LineSegment.swift
 //  Jiggle3
 //
 //  Created by Nicky Taylor on 11/30/24.
@@ -7,11 +7,9 @@
 
 import Foundation
 
-class SplineReducer3Segment: PrecomputedLineSegment {
+class SplineReducer6Segment: PrecomputedLineSegment {
     
     var isIllegal = false
-    
-    var isBucketed = false
     
     var isFlagged = false
     
@@ -36,9 +34,9 @@ class SplineReducer3Segment: PrecomputedLineSegment {
     var normalAngle = Float(0.0)
 }
 
-extension SplineReducer3Segment: CustomStringConvertible {
+extension SplineReducer6Segment: CustomStringConvertible {
     var description: String {
-        return "SplineReducer3Segment[\(p1.description), \(p2.description), n: \(normalX) \(normalY), d: \(directionX) \(directionY), l: \(length)]"
+        return "SplineReducer6Segment[\(p1.description), \(p2.description), n: \(normalX) \(normalY), d: \(directionX) \(directionY), l: \(length)]"
         
     }
 }

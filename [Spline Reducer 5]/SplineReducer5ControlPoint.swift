@@ -146,53 +146,5 @@ class SplineReducer5ControlPoint {
         inTanY = _inTanY
         outTanX = _outTanX
         outTanY = _outTanY
-        
-        var inDist = _inTanX * _inTanX + _inTanY * _inTanY
-        var outDist = _outTanX * _outTanX + _outTanY * _outTanY
-        
-        let epsilon1 = Float(32.0 * 32.0)
-        let epsilon2 = Float( 4.0 *  4.0)
-        let epsilon3 = Float(0.1 * 0.1)
-        
-        var rotation = Float(0.0)
-        var isValidReading = true
-        
-        if inDist > epsilon1 {
-            rotation = Math.face(target: .init(x: -_inTanX, y: -_inTanY))
-        } else if outDist > epsilon1 {
-            rotation = Math.face(target: .init(x: _outTanX, y: _outTanY))
-        } else if inDist > epsilon2 {
-            rotation = Math.face(target: .init(x: -_inTanX, y: -_inTanY))
-        } else if outDist > epsilon2 {
-            rotation = Math.face(target: .init(x: _outTanX, y: _outTanY))
-        } else if inDist > epsilon3 {
-            rotation = Math.face(target: .init(x: -_inTanX, y: -_inTanY))
-        } else if outDist > epsilon3 {
-            rotation = Math.face(target: .init(x: _outTanX, y: _outTanY))
-        } else {
-            isValidReading = false
-        }
-        
-        if inDist > Math.epsilon {
-            inDist = sqrtf(inDist)
-            originalTanMagnitudeIn = inDist
-        }
-        
-        
-        if outDist > Math.epsilon {
-            outDist = sqrtf(outDist)
-            originalTanMagnitudeOut = outDist
-        }
-        
-        if isValidReading {
-            originalTanAngleIn = rotation
-            originalTanAngleOut = rotation
-            originalTanDirectionOutX = sinf(rotation)
-            originalTanDirectionOutY = -cosf(rotation)
-            originalTanDirectionInX = -originalTanDirectionInX
-            originalTanDirectionInY = -originalTanDirectionInY
-            isValid = true
-        }
-        
     }
 }

@@ -14,12 +14,12 @@ import Foundation
 class SplineReducer5 {
     
     
-    // 1.0, 1.5, 2.0, 2.5
+    // 1.0, 1.5, 2.0, 2.5, 3.0,
     static let magnitudeFactorMin = Float(1.0)
-    static let magnitudeFactorMax = Float(2.5)
-    static let magnitudeTestSteps = 4
+    static let magnitudeFactorMax = Float(3.0)
+    static let magnitudeTestSteps = 6
     
-    static let rotationWiggleSpan = Math.pi_4
+    static let rotationWiggleSpan = Math.pi_6
     static let rotationWiggleSteps = 5
     
     var healedSegments = [SplineReducer5Segment]()
@@ -515,6 +515,7 @@ class SplineReducer5 {
         
         
         
+        /*
         purgeHealedSegments()
         if sampleCountA > 0 {
             var prevX = sampleXA[0]
@@ -548,6 +549,7 @@ class SplineReducer5 {
             
             
         }
+        */
         
         outputSpline.solve(closed: inputSpline.closed)
         
