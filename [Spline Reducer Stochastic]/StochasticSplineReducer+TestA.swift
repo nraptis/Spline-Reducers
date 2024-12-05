@@ -9,6 +9,7 @@ import Foundation
 
 extension StochasticSplineReducer {
     
+    // [S.R. Czech] 12-3-2024: This function works as intended.
     func addPointTestPointsA(x: Float, y: Float) {
         if testPointCountA >= testPointCapacityA {
             reserveCapacityTestPointsA(minimumCapacity: testPointCountA + (testPointCountA >> 1) + 1)
@@ -17,7 +18,8 @@ extension StochasticSplineReducer {
         testPointsYA[testPointCountA] = y
         testPointCountA += 1
     }
-
+    
+    // [S.R. Czech] 12-3-2024: This function works as intended.
     private func reserveCapacityTestPointsA(minimumCapacity: Int) {
         if minimumCapacity > testPointCapacityA {
             testPointsXA.reserveCapacity(minimumCapacity)
@@ -31,7 +33,8 @@ extension StochasticSplineReducer {
             testPointCapacityA = minimumCapacity
         }
     }
-
+    
+    // [S.R. Czech] 12-3-2024: This function works as intended.
     func getMaximumDistanceFromTestPointsToSegmentsA(isError: inout Bool) -> Float {
         
         if testPointCountA <= 2 {
@@ -68,7 +71,17 @@ extension StochasticSplineReducer {
         isError = false
         return result
     }
-
+    
+    // [S.R. Czech] 12-3-2024: This function works as intended.
+    func addTestSegmentA(_ segment: StochasticSplineReducerSegment) {
+        while testSegmentsA.count <= testSegmentCountA {
+            testSegmentsA.append(segment)
+        }
+        testSegmentsA[testSegmentCountA] = segment
+        testSegmentCountA += 1
+    }
+    
+    // [S.R. Czech] 12-3-2024: TODO: This is not verified and not used currently.
     func isTestPointsComplexA() -> Bool {
         
         if testPointCountA > 3 {
@@ -114,11 +127,4 @@ extension StochasticSplineReducer {
         return false
     }
     
-    func addTestSegmentA(_ segment: StochasticSplineReducerSegment) {
-        while testSegmentsA.count <= testSegmentCountA {
-            testSegmentsA.append(segment)
-        }
-        testSegmentsA[testSegmentCountA] = segment
-        testSegmentCountA += 1
-    }
 }

@@ -35,11 +35,11 @@ extension StochasticSplineReducer {
         let testPointsCount1f = Float(testPointsCount1)
         
         for bucketIndex in 0..<bucketCount {
-            let bucket = bucketes[bucketIndex]
+            let bucket = buckets[bucketIndex]
             
             // We have not combined with any
             // pouches, this is the initial state...
-            bucket.numberOfCombinedBucketes = 1
+            bucket.numberOfCombinedbuckets = 1
             
             // We loop N-1 times, adding the
             // line segments to each pouch...

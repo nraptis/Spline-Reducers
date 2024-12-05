@@ -21,8 +21,6 @@ class StochasticSplineReducerPartsFactory {
     private var segments = [StochasticSplineReducerSegment]()
     var segmentCount = 0
     func depositSegment(_ segment: StochasticSplineReducerSegment) {
-        segment.isIllegal = false
-        
         while segments.count <= segmentCount {
             segments.append(segment)
         }
@@ -45,24 +43,24 @@ class StochasticSplineReducerPartsFactory {
     ////////////////
     ///
     ///
-    var bucketes = [StochasticSplineReducerBucket]()
+    var buckets = [StochasticSplineReducerBucket]()
     var bucketCount = 0
     
     func depositBucket(_ bucket: StochasticSplineReducerBucket) {
-        while bucketes.count <= bucketCount {
-            bucketes.append(bucket)
+        while buckets.count <= bucketCount {
+            buckets.append(bucket)
         }
         
-        bucket.reset()
+        bucket.segmentCount = 0
         bucket.purgeHealedSegments()
         
-        bucketes[bucketCount] = bucket
+        buckets[bucketCount] = bucket
         bucketCount += 1
     }
     func withdrawBucket() -> StochasticSplineReducerBucket {
         if bucketCount > 0 {
             bucketCount -= 1
-            return bucketes[bucketCount]
+            return buckets[bucketCount]
         }
         return StochasticSplineReducerBucket()
     }
@@ -70,6 +68,7 @@ class StochasticSplineReducerPartsFactory {
     ///
     ///
     ////////////////
+    
     
     
 }

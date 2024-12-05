@@ -9,6 +9,7 @@ import Foundation
 
 extension StochasticSplineReducer {
     
+    // [S.R. Czech] 12-3-2024: This function works as intended.
     func addPointTestPointsB(x: Float, y: Float) {
         if testPointCountB >= testPointCapacityB {
             reserveCapacityTestPointsB(minimumCapacity: testPointCountB + (testPointCountB >> 1) + 1)
@@ -17,7 +18,8 @@ extension StochasticSplineReducer {
         testPointsYB[testPointCountB] = y
         testPointCountB += 1
     }
-
+    
+    // [S.R. Czech] 12-3-2024: This function works as intended.
     private func reserveCapacityTestPointsB(minimumCapacity: Int) {
         if minimumCapacity > testPointCapacityB {
             testPointsXB.reserveCapacity(minimumCapacity)
@@ -32,6 +34,7 @@ extension StochasticSplineReducer {
         }
     }
     
+    // [S.R. Czech] 12-3-2024: This function works as intended.
     func getMaximumDistanceFromTestPointsToSegmentsB(isError: inout Bool) -> Float {
         
         if testPointCountB <= 2 {
@@ -68,7 +71,17 @@ extension StochasticSplineReducer {
         isError = false
         return result
     }
-
+    
+    // [S.R. Czech] 12-3-2024: This function works as intended.
+    func addTestSegmentB(_ segment: StochasticSplineReducerSegment) {
+        while testSegmentsB.count <= testSegmentCountB {
+            testSegmentsB.append(segment)
+        }
+        testSegmentsB[testSegmentCountB] = segment
+        testSegmentCountB += 1
+    }
+    
+    // [S.R. Czech] 12-3-2024: TODO: This is not verified and not used currently.
     func isTestPointsComplexB() -> Bool {
         
         if testPointCountB > 3 {
@@ -112,13 +125,5 @@ extension StochasticSplineReducer {
             }
         }
         return false
-    }
-    
-    func addTestSegmentB(_ segment: StochasticSplineReducerSegment) {
-        while testSegmentsB.count <= testSegmentCountB {
-            testSegmentsB.append(segment)
-        }
-        testSegmentsB[testSegmentCountB] = segment
-        testSegmentCountB += 1
     }
 }

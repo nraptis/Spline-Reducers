@@ -9,8 +9,6 @@ import Foundation
 
 class StochasticSplineReducerSegment {
     
-    var isIllegal = false
-    
     var isFlagged = false
     
     var x1: Float = 0.0
@@ -32,12 +30,10 @@ class StochasticSplineReducerSegment {
             length = sqrtf(lengthSquared)
             directionX /= length
             directionY /= length
-            isIllegal = false
         } else {
             directionX = Float(0.0)
             directionY = Float(-1.0)
             length = 0.0
-            isIllegal = true
         }
     }
     

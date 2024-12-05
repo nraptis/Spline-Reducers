@@ -10,6 +10,15 @@ import Foundation
 enum StochasticSplineReducerCommand {
     case reduceFrontAndBack(StochasticSplineReducerNeighborCommandData)
     case reduceBackOnly(StochasticSplineReducerNeighborCommandData)
+    case chopper(StochasticSplineReducerChopperCommandData)
+}
+
+struct StochasticSplineReducerChopperCommandData {
+    let tolerance: Float
+    let minimumStep: Int
+    let maximumStep: Int
+    let tryCount: Int
+    let dupeOrInvalidRetryCount: Int
 }
 
 struct StochasticSplineReducerNeighborCommandData {

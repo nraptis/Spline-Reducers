@@ -10,7 +10,7 @@ import Foundation
 extension StochasticSplineReducer {
     
     // [S.R. Czech] 12-3-2024: This function works as intended.
-    func populateTempBucketes_ReduceSingle(maxCombinedPouches: Int) {
+    func populateTempbuckets_ReduceSingle(maxCombinedPouches: Int) {
         
         // We reset the temp pouch count to 0,
         // this we intend to populate.
@@ -20,15 +20,15 @@ extension StochasticSplineReducer {
         for bucketIndex in 0..<bucketCount {
             
             // Is this marked as visited?
-            let zp_cur = bucketes[bucketIndex]
+            let zp_cur = buckets[bucketIndex]
             if zp_cur.isVisited == false {
                 
                 var indexFwd1 = bucketIndex + 1
                 if indexFwd1 == bucketCount { indexFwd1 = 0 }
                 
                 // Will combining (current) and (forward 1) overflow?
-                let zp_f_1 = bucketes[indexFwd1]
-                let combinedCountFwd = zp_cur.numberOfCombinedBucketes + zp_f_1.numberOfCombinedBucketes
+                let zp_f_1 = buckets[indexFwd1]
+                let combinedCountFwd = zp_cur.numberOfCombinedbuckets + zp_f_1.numberOfCombinedbuckets
                 if combinedCountFwd <= maxCombinedPouches {
                     addTempBucket(bucket: zp_cur,
                                        bucketIndex: bucketIndex)
@@ -48,7 +48,7 @@ extension StochasticSplineReducer {
         // Mark all the zipper buckets as
         // not yet having been visited...
         for bucketIndex in 0..<bucketCount {
-            let bucket = bucketes[bucketIndex]
+            let bucket = buckets[bucketIndex]
             bucket.isVisited = false
         }
         
@@ -68,7 +68,7 @@ extension StochasticSplineReducer {
             }
             
             // Load up the temporary zipper buckets.
-            populateTempBucketes_ReduceSingle(maxCombinedPouches: maxCombinedPouches)
+            populateTempbuckets_ReduceSingle(maxCombinedPouches: maxCombinedPouches)
             
             // Did we find any temporary zipper buckets?
             if tempBucketCount <= 0 {
@@ -82,15 +82,15 @@ extension StochasticSplineReducer {
             // buckets until we end up reducing one
             // or we have exhausted the entire list...
             // Half A: From startIndex to EOL
-            var isLoopingThroughoutBucketes = true
+            var isLoopingThroughoutbuckets = true
             var loopIndex = startIndex
-            while (loopIndex < tempBucketCount) && (isLoopingThroughoutBucketes == true) {
+            while (loopIndex < tempBucketCount) && (isLoopingThroughoutbuckets == true) {
                 
                 KP_attemptCount += 1
                 
                 // The zipper pouch and the index
                 // from the master list..........
-                let bucket = tempBucketes[loopIndex]
+                let bucket = tempBuckets[loopIndex]
                 let bucketIndex = tempBucketIndices[loopIndex]
                 if attemptToReduceSingle(index: bucketIndex,
                                          numberOfPointsSampledForEachControlPoint: numberOfPointsSampledForEachControlPoint,
@@ -98,7 +98,7 @@ extension StochasticSplineReducer {
                     
                     // We succeeded, stop checking more
                     // zipper buckets on this "try" iteration (outer loop).
-                    isLoopingThroughoutBucketes = false
+                    isLoopingThroughoutbuckets = false
                     KP_successCount += 1
                 } else {
                     
@@ -116,11 +116,11 @@ extension StochasticSplineReducer {
             // or we have exhausted the entire list...
             // Half B: From 0 to startIndex
             loopIndex = 0
-            while (loopIndex < startIndex) && (isLoopingThroughoutBucketes == true) {
+            while (loopIndex < startIndex) && (isLoopingThroughoutbuckets == true) {
                 
                 KP_attemptCount += 1
                 
-                let bucket = tempBucketes[loopIndex]
+                let bucket = tempBuckets[loopIndex]
                 let bucketIndex = tempBucketIndices[loopIndex]
                 
                 if attemptToReduceSingle(index: bucketIndex,
@@ -128,7 +128,7 @@ extension StochasticSplineReducer {
                                          toleranceSquared: toleranceSquared) {
                     // We succeeded, stop checking more
                     // zipper buckets on this "try" iteration (outer loop).
-                    isLoopingThroughoutBucketes = false
+                    isLoopingThroughoutbuckets = false
                     KP_successCount += 1
                 } else {
                     // We failed, mark this node as visited.
@@ -140,7 +140,7 @@ extension StochasticSplineReducer {
                 }
             }
             
-            if (isLoopingThroughoutBucketes == true) {
+            if (isLoopingThroughoutbuckets == true) {
                 // We did not succeeded on any
                 // zipper pouch, there's nothing
                 // left to check, so we can exit...
@@ -148,13 +148,18 @@ extension StochasticSplineReducer {
             }
         }
         
-        print("ReduceSingle => tolerance = \(tolerance) (squared = \(toleranceSquared))")
-        print("ReduceSingle => maxCombinedPouches = \(maxCombinedPouches)")
-        print("ReduceSingle => KP_tryCount = \(KP_tryCount) / \(tryCount)")
-        print("ReduceSingle => KP_attemptCount = \(KP_attemptCount)")
-        print("ReduceSingle => KP_successCount = \(KP_successCount)")
-        print("ReduceSingle => KP_failureCount = \(KP_failureCount)")
+        if KP_successCount > 0 {
+            print("***COMPLETE (REDUCE SINGLE)*** ===> SUCCESS!")
+        } else {
+            print("***COMPLETE (REDUCE SINGLE)*** ===> FAILURE!")
+        }
+        print("(REDUCE SINGLE) => KP_tryCount = \(KP_tryCount) / \(tryCount), tolerance = \(tolerance)")
         
+        //print("ReduceSingle => tolerance = \(tolerance) (squared = \(toleranceSquared))")
+        //print("ReduceSingle => maxCombinedPouches = \(maxCombinedPouches)")
+        //print("ReduceSingle => KP_attemptCount = \(KP_attemptCount)")
+        //print("ReduceSingle => KP_successCount = \(KP_successCount)")
+        //print("ReduceSingle => KP_failureCount = \(KP_failureCount)")
     }
     
     //  Start: [a]...[bucketIndex]...[b]...[c]
@@ -193,7 +198,7 @@ extension StochasticSplineReducer {
         internalSpline.removeAll(keepingCapacity: true)
         for bucketIndex in 0..<bucketCount {
             if (bucketIndex != indexFwd1) {
-                let bucket = bucketes[bucketIndex]
+                let bucket = buckets[bucketIndex]
                 internalSpline.addControlPoint(bucket.x,
                                                bucket.y)
             }
@@ -202,11 +207,10 @@ extension StochasticSplineReducer {
         
         // The neighbors in question:
         // ...[b1][self][f1][f2][f3]...
-        let zp_b_1 = bucketes[indexBck1]
-        let zp_cur = bucketes[index]
-        let zp_f_1 = bucketes[indexFwd1]
-        let zp_f_2 = bucketes[indexFwd2]
-        let zp_f_3 = bucketes[indexFwd3]
+        let zp_b_1 = buckets[indexBck1]
+        let zp_cur = buckets[index]
+        let zp_f_1 = buckets[indexFwd1]
+        let zp_f_2 = buckets[indexFwd2]
         
         // Segments from b1..<self are test group A.
         for segmentIndex in 0..<zp_b_1.segmentCount {
@@ -266,7 +270,7 @@ extension StochasticSplineReducer {
         if newIndexFwd2 == newCount { newIndexFwd2 = 0 }
         
         // Points from b1..<self (in new spline) are test group A.
-        let count_b_2 = zp_b_1.numberOfCombinedBucketes * numberOfPointsSampledForEachControlPoint
+        let count_b_2 = zp_b_1.numberOfCombinedbuckets * numberOfPointsSampledForEachControlPoint
         for index in 1..<count_b_2 {
             let percent = Float(index) / Float(count_b_2)
             let x = internalSpline.getX(index: newIndexBck1, percent: percent)
@@ -277,8 +281,8 @@ extension StochasticSplineReducer {
         
         // Points from self..<f1 (in new spline) are test group B.
         // It should be noted that self and f1 are combined into self...
-        let numberOfCombinedBucketesTarget = zp_cur.numberOfCombinedBucketes + zp_f_1.numberOfCombinedBucketes
-        let count_cur = numberOfCombinedBucketesTarget * numberOfPointsSampledForEachControlPoint
+        let numberOfCombinedbucketsTarget = zp_cur.numberOfCombinedbuckets + zp_f_1.numberOfCombinedbuckets
+        let count_cur = numberOfCombinedbucketsTarget * numberOfPointsSampledForEachControlPoint
         for index in 1..<count_cur {
             let percent = Float(index) / Float(count_cur)
             let x = internalSpline.getX(index: newIndex, percent: percent)
@@ -288,7 +292,7 @@ extension StochasticSplineReducer {
         }
             
         // Points from f2..<f3 (in new spline) are test group B.
-        let count_f_2 = zp_f_2.numberOfCombinedBucketes * numberOfPointsSampledForEachControlPoint
+        let count_f_2 = zp_f_2.numberOfCombinedbuckets * numberOfPointsSampledForEachControlPoint
         for index in 1..<count_f_2 {
             let percent = Float(index) / Float(count_f_2)
             let x = internalSpline.getX(index: newIndexFwd1, percent: percent)
@@ -316,7 +320,7 @@ extension StochasticSplineReducer {
         StochasticSplineReducerBucket.transferAllSegments(from: zp_f_1, to: zp_cur)
         
         // We "combine" self and f1...
-        zp_cur.numberOfCombinedBucketes += zp_f_1.numberOfCombinedBucketes
+        zp_cur.numberOfCombinedbuckets += zp_f_1.numberOfCombinedbuckets
         
         // We remove f1...
         removeBucketOne(index: indexFwd1)
